@@ -11,12 +11,3 @@ for i in range(len(result)):
     if result[i] > 0:
         print(result[i], sign[i], end = ' ')
         i = i + 1
-
-
-
-
-
-
-
-#print (day, 'дней', hour, 'часов', min, 'минут')
-
