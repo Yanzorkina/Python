@@ -1,3 +1,5 @@
+file_1 = open('content.txt', 'w', encoding='utf-8')
+
 with open('nginx_logs.txt', 'r', encoding='utf-8') as f:
    for line in f:
        remote_addr = line.split(' - - ')[0]
@@ -6,3 +8,6 @@ with open('nginx_logs.txt', 'r', encoding='utf-8') as f:
        content = (remote_addr, request_type, requested_resource)
 
        print(content)
+
+
+       file_1.write(f'{content}\n')
