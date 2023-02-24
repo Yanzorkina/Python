@@ -1,6 +1,9 @@
 import subprocess
 import locale
 
+import chardet
+from chardet.universaldetector import UniversalDetector
+
 # 1
 print("Задача 1. Вывод:")
 words_in_str = ['разработка', 'сокет', 'декоратор']
@@ -70,7 +73,9 @@ def get_ping_log(site: str, limit: int):
     subproc_ping = subprocess.Popen(args, stdout=subprocess.PIPE)
     flag = 0
     for line in subproc_ping.stdout:
-        print(line.decode('cp866').strip("\n"))
+        detection = chardet.detect(line)
+        print(detection)
+        print(line.decode(detection['encoding']).encode('utf-8').decode('utf-8'))
         flag += 1
         if flag >= limit:
             print()
@@ -83,9 +88,19 @@ get_ping_log('google.com', 5)
 # 6
 print("\nЗадача 6. Вывод:")
 
-with open('test_file.txt', 'w', encoding='utf-8') as test_file:
+with open('test_file.txt', 'w') as test_file:
     test_file.write("сетевое программирование\nсокет\nдекоратор")
 
-with open('test_file.txt', encoding='utf-8') as test_file:
+detector = UniversalDetector()
+
+with open('test_file.txt', 'rb') as test_file:
+    for i in test_file:
+        detector.feed(i)
+        if detector.done:
+            break
+    detector.close()
+print(detector.result['encoding'])
+
+with open('test_file.txt', encoding=detector.result['encoding']) as test_file:
     for line in test_file:
         print(line, end="")
